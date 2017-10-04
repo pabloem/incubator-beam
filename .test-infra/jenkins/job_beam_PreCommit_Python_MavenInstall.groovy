@@ -39,6 +39,11 @@ mavenJob('beam_PreCommit_Python_MavenInstall') {
 
   // Sets that this is a PreCommit job.
   common_job_properties.setPreCommit(delegate, 'mvn clean install -pl sdks/python -am -amd')
+  
+  common_job_properties.enablePhraseTriggeringFromPullRequest(
+    delegate,
+    'Python SDK PreCommit Tests',
+    'Run Python PreCommit')
 
   // Maven goals for this job: The Python SDK, its dependencies, and things that depend on it.
   goals('''\
