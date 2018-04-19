@@ -160,3 +160,15 @@ task pythonPreCommit() {
   dependsOn ":beam-sdks-python:check"
 }
 
+
+release {
+  revertOnFail = true
+  git {
+    requireBranch = 'release-.*|master'
+  }
+  // TODO(pabloem): Remove the following flags
+  failOnCommitNeeded = false
+  failOnPublishNeeded = false
+  failOnUpdateNeeded = false
+  failOnUnversionedFiles = false
+}
