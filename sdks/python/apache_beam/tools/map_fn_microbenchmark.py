@@ -38,6 +38,13 @@ import apache_beam as beam
 from apache_beam.tools import utils
 from scipy import stats
 
+element_counter = beam.metrics.Metrics.counter('benchmark', 'elements')
+
+
+def flatmap_fn(ix):
+  element_counter.inc()
+  return (None, )
+
 
 def run_benchmark(num_maps=100, num_runs=10, num_elements_step=1000):
   timings = {}
@@ -47,7 +54,7 @@ def run_benchmark(num_maps=100, num_runs=10, num_elements_step=1000):
     with beam.Pipeline() as p:
       pc = p | beam.Create(range(num_elements))
       for ix in range(num_maps):
-        pc = pc | 'Map%d' % ix >> beam.FlatMap(lambda x: (None,))
+        pc = pc | 'Map%d' % ix >> beam.FlatMap(flatmap_fn)
     timings[num_elements] = time.time() - start
     print("%6d element%s %g sec" % (
         num_elements, " " if num_elements == 1 else "s", timings[num_elements]))

@@ -16,8 +16,8 @@
 #
 
 # This module is experimental. No backwards-compatibility guarantees.
-import threading
 from collections import namedtuple
+import threading
 
 from apache_beam.utils.counters import Counter
 from apache_beam.utils.counters import CounterName
@@ -30,18 +30,15 @@ except ImportError:
   FAST_SAMPLER = False
 
 
-_STATE_SAMPLERS = threading.local()
+_STATE_SAMPLER = None
 
 
 def set_current_tracker(tracker):
-  _STATE_SAMPLERS.tracker = tracker
+  _STATE_SAMPLER = tracker
 
 
 def get_current_tracker():
-  try:
-    return _STATE_SAMPLERS.tracker
-  except AttributeError:
-    return None
+  return _STATE_SAMPLER
 
 
 StateSamplerInfo = namedtuple(
