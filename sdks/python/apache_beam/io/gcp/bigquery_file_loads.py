@@ -50,14 +50,15 @@ from apache_beam.transforms.window import GlobalWindows
 _LOGGER = logging.getLogger(__name__)
 
 ONE_TERABYTE = (1 << 40)
+ONE_MEGABYTE = ONE_TERABYTE / 1024 / 1024
 
 # The maximum file size for imports is 5TB. We keep our files under that.
-_DEFAULT_MAX_FILE_SIZE = 4 * ONE_TERABYTE
+_DEFAULT_MAX_FILE_SIZE = 4 * ONE_MEGABYTE
 
 _DEFAULT_MAX_WRITERS_PER_BUNDLE = 20
 
 # The maximum size for a single load job is one terabyte
-_MAXIMUM_LOAD_SIZE = 15 * ONE_TERABYTE
+_MAXIMUM_LOAD_SIZE = 15 * ONE_MEGABYTE
 
 # Big query only supports up to 10 thousand URIs for a single load job.
 _MAXIMUM_SOURCE_URIS = 10 * 1000
