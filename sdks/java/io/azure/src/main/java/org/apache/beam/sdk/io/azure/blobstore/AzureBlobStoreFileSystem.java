@@ -26,23 +26,23 @@ import java.util.List;
 import org.apache.beam.sdk.io.FileSystem;
 import org.apache.beam.sdk.io.fs.MatchResult;
 
-class AzureBlobStoreFileSystem extends FileSystem<azfsResourceId> {
+class AzureBlobStoreFileSystem extends FileSystem<AzfsResourceId> {
 
     @Override
     protected String getScheme() {
-        return azfsResourceId.SCHEME;
+        return AzfsResourceId.SCHEME;
     }
 
     @Override
     protected List<MatchResult> match(List<String> specs) throws IOException {
 
-        List<azfsResourceId> paths = toAzfsPath(specs);
+        List<AzfsResourceId> paths = toAzfsPath(specs);
 
-        List<azfsResourceId> globs = new ArrayList<>();
-        List<azfsResourceId> nonGlobs = new ArrayList<>();
+        List<AzfsResourceId> globs = new ArrayList<>();
+        List<AzfsResourceId> nonGlobs = new ArrayList<>();
         List<Boolean> isGlobBooleans = new ArrayList<>();
 
-        for (asfsResourceId path : paths) {
+        for (AsfsResourceId path : paths) {
             if (path.isWildcard()) {
                 globs.add(path);
                 isGlobBooleans.add(true);
@@ -71,19 +71,19 @@ class AzureBlobStoreFileSystem extends FileSystem<azfsResourceId> {
         return matchResults.build();
     }
 
-    private List<azfsResourceId> toAzfsPaths(Collection<String> specs) {
+    private List<AzfsResourceId> toAzfsPaths(Collection<String> specs) {
         // TODO
         return null;
     }
 
     @VisibleForTesting
-    List<MatchResult> matchGlobPaths(Collection<azfsResourceId> globPaths) throws IOException {
+    List<MatchResult> matchGlobPaths(Collection<AzfsResourceId> globPaths) throws IOException {
         // TODO
         return null;
     }
 
     @VisibleForTesting
-    List<MatchResult> matchNonGlobPaths(Collection<azfsResourceId> globPaths) throws IOException {
+    List<MatchResult> matchNonGlobPaths(Collection<AzfsResourceId> globPaths) throws IOException {
         // TODO
         return null;
     }

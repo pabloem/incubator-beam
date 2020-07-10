@@ -17,7 +17,7 @@
  */
 package org.apache.beam.sdk.io.azure.blobstore;
 
-class azfsResourceId implements ResourceId{
+class AzfsResourceId implements ResourceId{
 
   static final String SCHEME = "azfs";
 
