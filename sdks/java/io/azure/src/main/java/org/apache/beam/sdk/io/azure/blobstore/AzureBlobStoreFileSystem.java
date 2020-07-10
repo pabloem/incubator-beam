@@ -124,7 +124,8 @@ class AzureBlobStoreFileSystem extends FileSystem<AzfsResourceId> {
     @Override
     protected void rename(List<AzfsResourceId> srcResourceIds, List<AzfsResourceId> destResourceIds)
             throws IOException {
-        // TODO
+        copy(srcResourceIds, destResourceIds);
+        delete(srcResourceIds);
     }
 
     @Override
