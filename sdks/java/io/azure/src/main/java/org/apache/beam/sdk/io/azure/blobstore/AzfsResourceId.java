@@ -23,7 +23,12 @@ class AzfsResourceId implements ResourceId{
 
   boolean isWildCard() {
     // TODO
-    return False;
+    return false;
+  }
+
+  static AzfsResourceId fromUri(String uri){
+    // TODO
+    return null;
   }
 
 }
