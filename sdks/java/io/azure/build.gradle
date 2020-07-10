@@ -15,13 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 plugins { id 'org.apache.beam.module' }
 applyJavaNature(
   automaticModuleName: 'org.apache.beam.sdk.io.azure',
   enableChecker: false)
 
 dependencies {
+  compile "com.azure:azure-storage-blob:12.1.0"
+  compile "com.azure:azure-identity:1.0.8"
+  compile "com.microsoft.azure:azure-storage:8.0.0"
+  compile "commons-io:commons-io:2.6"
+  compile library.java.slf4j_api
+  compile library.java.vendored_guava_26_0_jre
   compile project(path: ":sdks:java:core", configuration: "shadow")
   testCompile library.java.junit
+  testCompile project(path: ":sdks:java:core", configuration: "shadowTest")
+  testCompile library.java.mockito_core
+  testRuntimeOnly library.java.slf4j_jdk14
 }
