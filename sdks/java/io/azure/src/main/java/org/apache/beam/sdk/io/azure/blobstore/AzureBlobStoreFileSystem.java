@@ -73,18 +73,18 @@ class AzureBlobStoreFileSystem extends FileSystem<azfsResourceId> {
 
     private List<azfsResourceId> toAzfsPaths(Collection<String> specs) {
         // TODO
-        return None;
+        return null;
     }
 
     @VisibleForTesting
     List<MatchResult> matchGlobPaths(Collection<azfsResourceId> globPaths) throws IOException {
         // TODO
-        return None;
+        return null;
     }
 
     @VisibleForTesting
     List<MatchResult> matchNonGlobPaths(Collection<azfsResourceId> globPaths) throws IOException {
         // TODO
-        return None;
+        return null;
     }
 }
