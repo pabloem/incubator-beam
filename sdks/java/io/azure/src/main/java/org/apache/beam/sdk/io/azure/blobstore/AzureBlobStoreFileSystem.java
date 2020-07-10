@@ -17,16 +17,30 @@
  */
 package org.apache.beam.sdk.io.azure.blobstore;
 
+import static org.apache.beam.vendor.guava.v26_0_jre.com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.beam.vendor.guava.v26_0_jre.com.google.common.base.Preconditions.checkState;
 import java.io.IOException;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.beam.sdk.io.FileSystem;
+import org.apache.beam.sdk.io.azure.options.AzfsOptions;
+import org.apache.beam.sdk.io.fs.CreateOptions;
 import org.apache.beam.sdk.io.fs.MatchResult;
 
 class AzureBlobStoreFileSystem extends FileSystem<AzfsResourceId> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AzureBlobStoreFileSystem.class);
+
+    private final AzfsOptions options;
+
+    AzureBlobStoreFileSystem(AzfsOptions options) {
+        this.options = checkNotNull(options, "options");
+        // may want to do other things here too
+    }
 
     @Override
     protected String getScheme() {
@@ -87,4 +101,50 @@ class AzureBlobStoreFileSystem extends FileSystem<AzfsResourceId> {
         // TODO
         return null;
     }
+
+    @Override
+    protected WritableByteChannel create(AzfsResourceId resourceId, CreateOptions createOptions)
+            throws IOException {
+        // TODO
+        return null;
+    }
+
+    @Override
+    protected ReadableByteChannel open(AzfsResourceId resourceId) throws IOException {
+        // TODO
+        return null;
+    }
+
+    @Override
+    protected void copy(List<AzfsResourceId> srcResourceIds, List<AzfsResourceId> destResourceIds)
+            throws IOException {
+        // TODO
+    }
+
+    @Override
+    protected void rename(List<AzfsResourceId> srcResourceIds, List<AzfsResourceId> destResourceIds)
+            throws IOException {
+        // TODO
+    }
+
+    @Override
+    protected void delete(Collection<AzfsResourceId> resourceIds) throws IOException{
+        // TODO
+    }
+
+    @Override
+    protected AzfsResourceId matchNewResource(String singleResourceSpec, boolean isDirectory) {
+        if (isDirectory) {
+            if (!singleResourceSpec.endsWith("/")) {
+                singleResourceSpec += "/";
+            }
+        } else {
+            checkArgument(
+                    !singleResourceSpec.endsWith("/"),
+                    "Expected a file path, but [%s] ends with '/'. This is unsupported in AzfsFileSystem.",
+                    singleResourceSpec);
+        }
+        return AzfsResourceId.fromUri(singleResourceSpec);
+    }
+
 }
