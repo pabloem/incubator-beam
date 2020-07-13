@@ -15,3 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.beam.sdk.io.azure.blobstore;
+
+@RunWith(JUnit.class)
+
+public class AzureBlobStoreFileSystemTest {
+
+    @Test
+    public void testGetScheme() {
+        AzureBlobStoreFileSystem azureFileSystem = new AzureBlobStoreFileSystem(AzfsOptions());
+        assertEquals("azfs", azureFileSystem.getScheme());
+    }
+}
