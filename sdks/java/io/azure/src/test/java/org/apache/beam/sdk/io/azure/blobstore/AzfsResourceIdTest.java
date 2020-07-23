@@ -33,10 +33,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.runners.Enclosed;
 import org.junit.runners.Parameterized;
 
-@RunWith(JUnit4.class)
+@RunWith(Enclosed.class)
 public class AzfsResourceIdTest {
 
   @Rule public ExpectedException thrown = ExpectedException.none();
@@ -115,6 +115,7 @@ public class AzfsResourceIdTest {
     }
   }
 
+  public static class NonParameterizedTests {
   @Test
   public void testMultipleResolves() {
     assertEquals(
@@ -123,6 +124,7 @@ public class AzfsResourceIdTest {
             .resolve("aa", RESOLVE_DIRECTORY)
             .resolve("bb", RESOLVE_DIRECTORY)
             .resolve("cc", RESOLVE_DIRECTORY));
+    assertEquals(1,2);
   }
 
   @Test
@@ -312,6 +314,7 @@ public class AzfsResourceIdTest {
     assertTrue(AzfsResourceId.fromUri("azfs://account/container/a?c/glob").isWildcard());
     assertTrue(AzfsResourceId.fromUri("azfs://account/container/a[bcd]e/glob").isWildcard());
     assertFalse(AzfsResourceId.fromComponents("account", "container").isWildcard());
+  }
   }
 
   // TODO: Consider adding a ResourceIdTester.runResourceIdBattery() test
