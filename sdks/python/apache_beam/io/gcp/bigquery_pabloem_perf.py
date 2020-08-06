@@ -35,16 +35,10 @@ python -m apache_beam.io.gcp.bigquery_write_perf_test \
     --staging_location=gs://...
     --temp_location=gs://...
     --sdk_location=.../dist/apache-beam-x.x.x.dev0.tar.gz
-    --publish_to_big_query=true
     --metrics_dataset=gs://...
     --metrics_table=...
     --output_dataset=...
-    --output_table=...
-    --input_options='{
-    \"num_records\": 1024,
-    \"key_size\": 1,
-    \"value_size\": 1024,
-    }'"
+    --output_table=..."
 
 This setup will result in a table of 1MB size.
 """
@@ -53,12 +47,13 @@ This setup will result in a table of 1MB size.
 
 from __future__ import absolute_import
 
+import json
 import logging
 
 from apache_beam import Map
 from apache_beam import ParDo
 from apache_beam.io import BigQueryDisposition
-from apache_beam.io import Read
+from apache_beam.io import *
 from apache_beam.io import WriteToBigQuery
 from apache_beam.io.gcp.bigquery_tools import parse_table_schema_from_json
 from apache_beam.io.gcp.tests import utils
@@ -76,27 +71,41 @@ class BigQueryWritePerfTest(LoadTest):
 
   def test(self):
     SCHEMA = parse_table_schema_from_json(
-        '{"fields": [{"name": "data", "type": "BYTES"},{"name": "string", "type": "BYTES"}]}')
+        json.dumps({"fields": [
+            {"name": "name", "type": "STRING"},
+            {"name": "age", "type": "INTEGER"},
+            {"name": "uuid", "type": "BYTES"},
+            {"name": "cholesterol_levels", "type": "FLOAT"},
+            {"name": "test_time", "type": "TIMESTAMP"},
+            {"name": "birth_date", "type": "DATE"},
+            {"name": "bytes_content", "type": "BYTES"},
+            ]}))
 
-    def format_record(record):
-      # Since Synthetic Source returns data as a dictionary, we should skip one
-      # of the part
+    def format_row(row):
       import base64
-      return {'data': base64.b64encode(record[1])}
+      from datetime import datetime
+      for k in row.keys():
+        if k == 'uuid' or k == 'bytes_content':
+          row[k] = base64.b64encode(row[k].encode('utf8'))
+        if k == 'test_time':
+          s = row[k]/1000
+          row[k] = datetime.fromtimestamp(s).strftime('%Y-%m-%d %H:%M:%S')
+        if k == 'birth_date':
+          s = row[k]/1000
+          row[k] = datetime.fromtimestamp(s).strftime('%Y-%m-%d')
+      return row
 
     (  # pylint: disable=expression-not-assigned
         self.pipeline
-        | 'Produce rows' >> Read(
-            SyntheticSource(self.parse_synthetic_source_options()))
-        | 'Count messages' >> ParDo(CountMessages(self.metrics_namespace))
-        | 'Format' >> Map(format_record)
-        | 'Measure time' >> ParDo(MeasureTime(self.metrics_namespace))
+        | 'Read rows' >> ReadStringsFromPubSub(
+            topic=self.pipeline.get_option("topic"))
+        | 'Format' >> Map(json.loads)
+        | 'FormatRow' >> Map(format_row)
         | 'Write to BigQuery' >> WriteToBigQuery(
             dataset=self.output_dataset,
             table=self.output_table,
-            schema=SCHEMA,
-            create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
-            write_disposition=BigQueryDisposition.WRITE_TRUNCATE))
+            insert_retry_strategy='RETRY_NEVER',
+            schema=SCHEMA))
 
   def cleanup(self):
     """Removes an output BQ table."""
