@@ -52,6 +52,7 @@ dependencies {
   compile project(path: ":sdks:java:core", configuration: "shadow")
   compile project(":sdks:java:extensions:google-cloud-platform-core")
   compile project(":sdks:java:io:google-cloud-platform")
+  compile project(":sdks:java:io:azure")
   compile project(":sdks:java:extensions:ml")
   compile library.java.avro
   compile library.java.bigdataoss_util

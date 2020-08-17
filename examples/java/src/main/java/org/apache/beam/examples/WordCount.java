@@ -20,6 +20,7 @@ package org.apache.beam.examples;
 import org.apache.beam.examples.common.ExampleUtils;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
+import org.apache.beam.sdk.io.azure.options.BlobstoreOptions;
 import org.apache.beam.sdk.metrics.Counter;
 import org.apache.beam.sdk.metrics.Distribution;
 import org.apache.beam.sdk.metrics.Metrics;
@@ -174,6 +175,10 @@ public class WordCount {
 
   static void runWordCount(WordCountOptions options) {
     Pipeline p = Pipeline.create(options);
+    options.setInputFile("azfs://ettasaccount/source-container2bec7e09-4550-41b7-a6d8-c28cdada3a0c/src-blob");
+    options.setOutput("/tmp/tmp.Ih4gBKOsYy/beam/newpablito");
+    options.as(BlobstoreOptions.class).setAzureConnectionString(System.getenv("AZURE_STORAGE_CONNECTION_STRING"));
+    System.out.println(options.as(BlobstoreOptions.class).getAzureConnectionString());
 
     // Concepts #2 and #3: Our pipeline applies the composite CountWords transform, and passes the
     // static FormatAsTextFn() to the ParDo transform.

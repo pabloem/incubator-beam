@@ -59,21 +59,21 @@ public interface AzureOptions extends PipelineOptions {
   }
 
   /** The client configuration instance that should be used to configure Azure service clients. */
-  @Description(
+  /*@Description(
       "The client configuration instance that should be used to configure Azure service clients")
   @Default.InstanceFactory(ConfigurationFactory.class)
   Configuration getClientConfiguration();
 
-  void setClientConfiguration(Configuration configuration);
+  void setClientConfiguration(Configuration configuration);*/
 
   /** The client configuration instance that should be used to configure Azure service clients. */
-  @Description(
+  /*@Description(
       "The client configuration instance that should be used to configure Azure http client configuration parameters."
           + "Mentioned parameters are the available parameters that can be set. Set only those that need custom changes.")
   @Default.InstanceFactory(ConfigurationFactory.class)
   Configuration getAzureHttpConfiguration();
 
-  void setAzureHttpConfiguration(Configuration configuration);
+  void setAzureHttpConfiguration(Configuration configuration);*/
 
   /** Default Azure client configuration. */
   class ConfigurationFactory implements DefaultValueFactory<Configuration> {

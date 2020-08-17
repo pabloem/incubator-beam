@@ -31,17 +31,10 @@ public class DefaultBlobstoreClientBuilderFactory implements BlobstoreClientBuil
   public BlobServiceClientBuilder createBuilder(BlobstoreOptions blobstoreOptions) {
     BlobServiceClientBuilder builder = new BlobServiceClientBuilder();
 
-    if (blobstoreOptions.getClientConfiguration() != null) {
-      builder = builder.configuration(blobstoreOptions.getClientConfiguration());
-    }
-
     if (blobstoreOptions.getAzureConnectionString() != null) {
       builder.connectionString(blobstoreOptions.getAzureConnectionString());
     }
 
-    if (!Strings.isNullOrEmpty(blobstoreOptions.getAzureServiceEndpoint())) {
-      builder = builder.endpoint(blobstoreOptions.getAzureServiceEndpoint());
-    }
     return builder;
   }
 }
