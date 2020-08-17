@@ -330,6 +330,7 @@ class AzureBlobStoreFileSystem extends FileSystem<AzfsResourceId> {
     if (!blobClient.exists()) {
       throw new FileNotFoundException("The requested file doesn't exist.");
     }
+    LOG.info("Creating a ReadableByteChannel for {}", resourceId);
     return new AzureReadableSeekableByteChannel(blobClient);
   }
 

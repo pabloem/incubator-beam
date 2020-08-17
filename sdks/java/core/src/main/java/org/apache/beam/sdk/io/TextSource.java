@@ -33,6 +33,9 @@ import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.vendor.grpc.v1p26p0.com.google.protobuf.ByteString;
 import org.apache.beam.vendor.guava.v26_0_jre.com.google.common.annotations.VisibleForTesting;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Implementation detail of {@link TextIO.Read}.
@@ -49,6 +52,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 @VisibleForTesting
 class TextSource extends FileBasedSource<String> {
+  private static final Logger LOG = LoggerFactory.getLogger(TextSource.class);
   byte[] delimiter;
 
   TextSource(
@@ -137,6 +141,7 @@ class TextSource extends FileBasedSource<String> {
       // If the first offset is greater than zero, we need to skip bytes until we see our
       // first delimiter.
       long startOffset = getCurrentSource().getStartOffset();
+      LOG.info("Starting to read at offset {}", startOffset);
       if (startOffset > 0) {
         checkState(
             channel instanceof SeekableByteChannel,
