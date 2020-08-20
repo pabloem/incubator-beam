@@ -134,11 +134,10 @@ class TestBlobStorageIO(unittest.TestCase):
   def setUp(self):
     connect_str = """DefaultEndpointsProtocol=http;AccountName=
     devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFs
-    uFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:100
-    00/devstoreaccount1;"""
+    uFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"""
     self.azurite_client = BlobServiceClient.from_connection_string(connect_str)
     self.azfs = blobstorageio.BlobStorageIO(self.azurite_client)
-    self.TEST_DATA_PATH = 'http://127.0.0.1:1000/devstoreaccount1/gsoc/'
+    self.TEST_DATA_PATH = 'azfs://devstoreaccount1/gsoc/'
 
   def test_file_mode(self):
     file_name = self.TEST_DATA_PATH + 'sloth/pictures/sleeping'
