@@ -132,9 +132,11 @@ class TestBlobStorageIO(unittest.TestCase):
     return fake_file
 
   def setUp(self):
-    connect_str = """DefaultEndpointsProtocol=http;AccountName=
-    devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFs
-    uFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"""
+    connect_str = (
+        "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;"
+        + "AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFs"
+        + "uFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;"
+        + "BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;")
     self.azurite_client = BlobServiceClient.from_connection_string(connect_str)
     self.azfs = blobstorageio.BlobStorageIO(self.azurite_client)
     self.TEST_DATA_PATH = 'azfs://devstoreaccount1/gsoc/'
@@ -437,16 +439,22 @@ class TestBlobStorageIO(unittest.TestCase):
   def test_delete(self):
     file_name = self.TEST_DATA_PATH + 'test_delete'
     file_size = 1024
+    print('deleting non-existent..')
 
     # Test deletion of non-existent file.
     self.azfs.delete(file_name)
 
+    print('inserting new file..')
     self._insert_random_file(file_name, file_size)
+    print('listing new file..')
     files = self.azfs.list_prefix(self.TEST_DATA_PATH)
     self.assertTrue(file_name in files)
+    print('deleting the new file..')
 
     self.azfs.delete(file_name)
+    print('ded the new file..')
     self.assertFalse(self.azfs.exists(file_name))
+    print('no exist the new file..')
 
   def test_delete_paths(self):
     # Create files.
